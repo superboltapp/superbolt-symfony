@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="Superbolt\SuperboltBundle\EventListener\ConsoleEventsListener" class="Superbolt\SuperboltBundle\EventListener\ConsoleEventsListener">
+            <argument key="$environment"></argument>
+            <argument key="$secret"></argument>
+            <tag name="kernel.event_listener" event="console.command" method="onConsoleStart" />
+            <tag name="kernel.event_listener" event="console.terminate" method="onConsoleFinish" />
+        </service>
+    </services>
+</container>
