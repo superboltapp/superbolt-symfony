@@ -2,6 +2,7 @@
 
 namespace Superbolt\SuperboltBundle\EventListener;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Superbolt\Core\Api;
 use Superbolt\Core\Cron;
 use Symfony\Component\Console\ConsoleEvents;
@@ -38,20 +39,32 @@ final class ConsoleEventsListener implements EventSubscriberInterface
     {
         $command = $event->getCommand();
 
-        $response = $this->cronLogger->sendStartPing(
-            $command ? $command->getName() : null,
-            null,
-            $this->environment
-        );
+        try {
+            $response = $this->cronLogger->sendStartPing(
+                $command ? $command->getName() : null,
+                '',
+                $this->environment
+            );
+        } catch (GuzzleException $exception) {
+            return;
+        }
 
         $this->cronToken = $response->getCronToken();
     }
 
     public function onConsoleFinish(ConsoleTerminateEvent $event): void
     {
-        $this->cronLogger->sendFinishPing(
-            $this->cronToken,
-            $event->getExitCode()
-        );
+        if ($this->cronToken === null) {
+            return;
+        }
+
+        try {
+            $this->cronLogger->sendFinishPing(
+                $this->cronToken,
+                $event->getExitCode()
+            );
+        } catch (GuzzleException $exception) {
+            return;
+        }
     }
 }
