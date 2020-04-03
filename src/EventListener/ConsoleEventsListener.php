@@ -36,7 +36,6 @@ final class ConsoleEventsListener implements EventSubscriberInterface
 
     public function onConsoleStart(ConsoleCommandEvent $event): void
     {
-        var_dump('yoo'); die();
         $command = $event->getCommand();
 
         $response = $this->cronLogger->sendStartPing(
