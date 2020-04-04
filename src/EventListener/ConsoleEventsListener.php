@@ -21,10 +21,10 @@ final class ConsoleEventsListener implements EventSubscriberInterface
     /** @var string|null */
     private $cronToken;
 
-    public function __construct(string $environment, string $secret)
+    public function __construct(string $environment, string $secret, ?string $endpoint)
     {
         $this->environment = $environment;
-        $this->cronLogger = new Cron(new Api($secret));
+        $this->cronLogger = new Cron(new Api($secret, $endpoint));
     }
 
     public static function getSubscribedEvents(): array
@@ -42,11 +42,11 @@ final class ConsoleEventsListener implements EventSubscriberInterface
         try {
             $response = $this->cronLogger->sendStartPing(
                 $command ? $command->getName() : null,
-                '',
+                '**',
                 $this->environment
             );
         } catch (GuzzleException $exception) {
-            return;
+            throw $exception;
         }
 
         $this->cronToken = $response->getCronToken();
@@ -64,7 +64,7 @@ final class ConsoleEventsListener implements EventSubscriberInterface
                 $event->getExitCode()
             );
         } catch (GuzzleException $exception) {
-            return;
+            throw $exception;
         }
     }
 }

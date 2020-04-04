@@ -8,6 +8,7 @@
         <service id="Superbolt\SuperboltBundle\EventListener\ConsoleEventsListener" class="Superbolt\SuperboltBundle\EventListener\ConsoleEventsListener">
             <argument key="$environment"></argument>
             <argument key="$secret"></argument>
+            <argument key="$endpoint"></argument>
             <tag name="kernel.event_listener" event="console.command" method="onConsoleStart" />
             <tag name="kernel.event_listener" event="console.terminate" method="onConsoleFinish" />
         </service>
