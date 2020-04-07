@@ -2,11 +2,11 @@
 
 namespace Superbolt\SuperboltBundle\EventListener;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Superbolt\Core\Api;
 use Superbolt\Core\Cron;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -32,6 +32,7 @@ final class ConsoleEventsListener implements EventSubscriberInterface
         return [
             ConsoleEvents::COMMAND => 'onConsoleStart',
             ConsoleEvents::TERMINATE => 'onConsoleFinish',
+            ConsoleEvents::ERROR => 'onConsoleError',
         ];
     }
 
@@ -39,15 +40,11 @@ final class ConsoleEventsListener implements EventSubscriberInterface
     {
         $command = $event->getCommand();
 
-        try {
-            $response = $this->cronLogger->sendStartPing(
-                $command ? $command->getName() : null,
-                '**',
-                $this->environment
-            );
-        } catch (GuzzleException $exception) {
-            throw $exception;
-        }
+        $response = $this->cronLogger->sendStartPing(
+            $command ? $command->getName() : null,
+            'manual',
+            $this->environment
+        );
 
         $this->cronToken = $response->getCronToken();
     }
@@ -58,13 +55,22 @@ final class ConsoleEventsListener implements EventSubscriberInterface
             return;
         }
 
-        try {
-            $this->cronLogger->sendFinishPing(
-                $this->cronToken,
-                $event->getExitCode()
-            );
-        } catch (GuzzleException $exception) {
-            throw $exception;
+        $this->cronLogger->sendFinishPing(
+            $this->cronToken,
+            $event->getExitCode()
+        );
+    }
+
+    public function onConsoleError(ConsoleErrorEvent $event): void
+    {
+        if ($this->cronToken === null) {
+            return;
         }
+
+        $this->cronLogger->sendLog(
+            $this->cronToken,
+            $event->getError()->getMessage(),
+            $event->getExitCode()
+        );
     }
 }

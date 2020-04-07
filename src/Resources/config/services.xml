@@ -11,6 +11,7 @@
             <argument key="$endpoint"></argument>
             <tag name="kernel.event_listener" event="console.command" method="onConsoleStart" />
             <tag name="kernel.event_listener" event="console.terminate" method="onConsoleFinish" />
+            <tag name="kernel.event_listener" event="console.error" method="onConsoleError" />
         </service>
     </services>
 </container>
