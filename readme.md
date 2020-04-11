@@ -43,7 +43,7 @@ vendor/bin/phpunit
 
 ## Security
 
-If you discover any security related issues, please email package@superbolt.app instead of using the issue tracker.
+If you discover any security related issues, please email info@superbolt.app instead of using the issue tracker.
 
 ## Credits
 

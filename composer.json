@@ -8,7 +8,7 @@
     "authors": [
         {
             "name": "Superbolt",
-            "email": "package@superbolt.app",
+            "email": "info@superbolt.app",
             "homepage": "https://github.com/superboltapp"
         }
     ],
@@ -22,7 +22,8 @@
         "symfony/event-dispatcher": "^4.0||^5.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~8.0"
+        "phpunit/phpunit": "~8.0",
+        "symplify/easy-coding-standard": "^7.2"
     },
     "autoload": {
         "psr-4": {

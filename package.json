@@ -1,0 +1,17 @@
+{
+    "private": true,
+    "husky": {
+        "hooks": {
+            "pre-commit": "make pre-commit"
+        }
+    },
+    "lint-staged": {
+        "*.php": [
+            "php vendor/bin/ecs check --fix --config=easy-coding-standard.yml"
+        ]
+    },
+    "devDependencies": {
+        "husky": "^4.2.3",
+        "lint-staged": "^10.1.3"
+    }
+}

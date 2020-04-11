@@ -1,0 +1,18 @@
+services:
+#  PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer: ~
+#  PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer: ~
+#  PhpCsFixer\Fixer\FunctionNotation\PhpdocToParamTypeFixer: ~
+  PhpCsFixer\Fixer\Strict\StrictComparisonFixer: ~
+  PhpCsFixer\Fixer\Strict\StrictParamFixer: ~
+  PhpCsFixer\Fixer\FunctionNotation\ReturnTypeDeclarationFixer: ~
+  PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer: ~
+
+parameters:
+  sets:
+    - 'clean-code'
+    - 'psr12'
+
+  exclude_files:
+    - 'node_modules/*'
+    - 'vendor/*'
+    - 'bootstrap/*'
