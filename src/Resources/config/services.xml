@@ -9,6 +9,7 @@
             <argument key="$environment"></argument>
             <argument key="$secret"></argument>
             <argument key="$endpoint"></argument>
+            <argument key="$commands"></argument>
             <tag name="kernel.event_listener" event="console.command" method="onConsoleStart" />
             <tag name="kernel.event_listener" event="console.terminate" method="onConsoleFinish" />
             <tag name="kernel.event_listener" event="console.error" method="onConsoleError" />

@@ -4,6 +4,7 @@ namespace Superbolt\SuperboltBundle\EventListener;
 
 use Superbolt\Core\Api;
 use Superbolt\Core\Cron;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
@@ -21,9 +22,13 @@ final class ConsoleEventsListener implements EventSubscriberInterface
     /** @var string|null */
     private $cronToken;
 
-    public function __construct(string $environment, string $secret, ?string $endpoint)
+    /** @var array */
+    private $commands;
+
+    public function __construct(string $environment, string $secret, ?string $endpoint, array $commands)
     {
         $this->environment = $environment;
+        $this->commands = $commands;
         $this->cronLogger = new Cron(new Api($secret, $endpoint));
     }
 
@@ -40,8 +45,12 @@ final class ConsoleEventsListener implements EventSubscriberInterface
     {
         $command = $event->getCommand();
 
+        if (!$this->configuredCommand($command)) {
+            return;
+        }
+
         $response = $this->cronLogger->sendStartPing(
-            $command ? $command->getName() : null,
+            $command,
             'manual',
             $this->environment
         );
@@ -51,7 +60,9 @@ final class ConsoleEventsListener implements EventSubscriberInterface
 
     public function onConsoleFinish(ConsoleTerminateEvent $event): void
     {
-        if ($this->cronToken === null) {
+        $command = $event->getCommand();
+
+        if ($this->cronToken === null || !$this->configuredCommand($command)) {
             return;
         }
 
@@ -63,7 +74,9 @@ final class ConsoleEventsListener implements EventSubscriberInterface
 
     public function onConsoleError(ConsoleErrorEvent $event): void
     {
-        if ($this->cronToken === null) {
+        $command = $event->getCommand();
+
+        if ($this->cronToken === null || !$this->configuredCommand($command)) {
             return;
         }
 
@@ -72,5 +85,14 @@ final class ConsoleEventsListener implements EventSubscriberInterface
             $event->getError()->getMessage(),
             $event->getExitCode()
         );
+    }
+
+    private function configuredCommand(?Command $command): bool
+    {
+        if ($command === null) {
+            return false;
+        }
+
+        return in_array($command->getName(), $this->commands, true);
     }
 }

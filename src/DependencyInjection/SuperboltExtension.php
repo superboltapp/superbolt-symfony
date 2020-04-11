@@ -21,9 +21,11 @@ class SuperboltExtension extends Extension
         $definition->replaceArgument('$environment', $config['environment']);
         $definition->replaceArgument('$secret', $config['secret']);
         $definition->replaceArgument('$endpoint', $config['endpoint']);
+        $definition->replaceArgument('$commands', $config['commands']);
 
         $container->setParameter('$environment',$config['environment']);
         $container->setParameter('$secret',$config['secret']);
         $container->setParameter('$endpoint',$config['endpoint']);
+        $container->setParameter('$commands',$config['commands']);
     }
 }

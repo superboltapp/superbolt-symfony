@@ -15,6 +15,7 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('environment')->defaultValue('dev')->end()
             ->scalarNode('secret')->defaultValue('test-api-key')->end()
             ->scalarNode('endpoint')->defaultValue(null)->end()
+            ->arrayNode('commands')->defaultValue([])->end()
             ->end()
             ->end()
         ;
