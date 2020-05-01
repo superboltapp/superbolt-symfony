@@ -4,7 +4,7 @@
     "description": "Symfony adapter for Superbolt",
     "keywords": ["superbolt", "Symfony"],
     "homepage": "https://github.com/superbolt/superbolt-symfony",
-    "license": "",
+    "license": "MIT",
     "authors": [
         {
             "name": "Superbolt",
