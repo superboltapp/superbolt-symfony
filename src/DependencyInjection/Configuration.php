@@ -1,4 +1,5 @@
 <?php
+
 namespace Superbolt\SuperboltBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -12,13 +13,12 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
-            ->scalarNode('environment')->defaultValue('dev')->end()
-            ->scalarNode('secret')->defaultValue('test-api-key')->end()
-            ->scalarNode('endpoint')->defaultValue(null)->end()
-            ->arrayNode('commands')->defaultValue([])->end()
+                ->scalarNode('environment')->end()
+                ->scalarNode('secret')->end()
+                ->scalarNode('endpoint')->defaultNull()->end()
+                ->arrayNode('commands')->scalarPrototype()->end()
             ->end()
-            ->end()
-        ;
+        ->end();
 
         return $treeBuilder;
     }

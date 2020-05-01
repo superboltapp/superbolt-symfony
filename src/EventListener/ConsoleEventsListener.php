@@ -50,7 +50,7 @@ final class ConsoleEventsListener implements EventSubscriberInterface
         }
 
         $response = $this->cronLogger->sendStartPing(
-            $command,
+            $command->getName(),
             'manual',
             $this->environment
         );
@@ -93,6 +93,6 @@ final class ConsoleEventsListener implements EventSubscriberInterface
             return false;
         }
 
-        return in_array($command->getName(), $this->commands, true);
+        return in_array(get_class($command), $this->commands, true);
     }
 }

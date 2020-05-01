@@ -1,4 +1,5 @@
 <?php
+
 namespace Superbolt\SuperboltBundle\DependencyInjection;
 
 use Superbolt\SuperboltBundle\EventListener\ConsoleEventsListener;
@@ -11,11 +12,10 @@ class SuperboltExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration(new Configuration(), $configs);
 
         $definition = $container->getDefinition(ConsoleEventsListener::class);
         $definition->replaceArgument('$environment', $config['environment']);
@@ -23,9 +23,9 @@ class SuperboltExtension extends Extension
         $definition->replaceArgument('$endpoint', $config['endpoint']);
         $definition->replaceArgument('$commands', $config['commands']);
 
-        $container->setParameter('$environment',$config['environment']);
-        $container->setParameter('$secret',$config['secret']);
-        $container->setParameter('$endpoint',$config['endpoint']);
-        $container->setParameter('$commands',$config['commands']);
+        $container->setParameter('$environment', $config['environment']);
+        $container->setParameter('$secret', $config['secret']);
+        $container->setParameter('$endpoint', $config['endpoint']);
+        $container->setParameter('$commands', $config['commands']);
     }
 }
